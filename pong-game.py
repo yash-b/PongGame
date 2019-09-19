@@ -11,9 +11,9 @@ from pygame.locals import *
 # - [X] Top and bottom paddles
 # - [X] Scoring and max limit to score
 
-MOVE_SPEED = 4
-WHITE, BLACK = (255, 255, 255), (0, 0, 0)
-pos_ball, vel_ball, radius_ball = [0, 0], [0, 0], 5
+MOVE_SPEED = 5
+WHITE, BLACK, GREEN = (255, 255, 255), (0, 0, 0), (57, 255, 20)
+pos_ball, vel_ball, radius_ball = [0, 0], [0, 0], 3.5
 vel_x, vel_y = 0, 0
 
 pygame.init()
@@ -30,7 +30,7 @@ point_scored_sound = pygame.mixer.Sound('resources/point_scored.wav')
 game_won_sound = pygame.mixer.Sound('resources/game_won.wav')
 game_lost_sound = pygame.mixer.Sound('resources/game_lost.wav')
 winner_winner_player = pygame.mixer.Sound('resources/player_wins.wav')
-pygame.mixer.music.load('resources/background_music.mid')
+pygame.mixer.music.load('resources/background_music.wav')
 
 
 pos_paddle_one = [4, WINDOW_HEIGHT // 2]
@@ -45,7 +45,7 @@ paddle_two = pygame.Rect(0, 1, 100, 8)
 paddle_three = pygame.Rect(0, 390, 100, 8)
 paddle_four = pygame.Rect(790, WINDOW_HEIGHT // 2, 8, 100)
 paddle_five = pygame.Rect(700, 1, 100, 8)
-paddle_six = pygame.Rect(700, 390, 8, 100)
+paddle_six = pygame.Rect(700, 390, 100, 100)
 ball = pygame.draw.circle(surface, WHITE, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2), 10)
 
 PLAYER_SCORE, AI_SCORE, PLAYER_GAMES_WON, AI_GAMES_WON = 0, 0, 0, 0
@@ -83,7 +83,6 @@ while True:
         reset_pong(False)
 
     go_left, go_right, go_up, go_down = 0, 0, 0, 0
-    pygame.draw.rect(surface, WHITE, (200, 150, 100, 50))
 
     while True:
         for event in pygame.event.get():
@@ -144,28 +143,22 @@ while True:
 
         surface.fill(BLACK)
 
-        pygame.draw.line(surface, WHITE, [WINDOW_WIDTH // 2,  50], [WINDOW_WIDTH // 2, 100], 1)
+        pygame.draw.line(surface, WHITE, [WINDOW_WIDTH // 2, 0], [WINDOW_WIDTH // 2, 50], 1)
+        pygame.draw.line(surface, WHITE, [WINDOW_WIDTH // 2,  75], [WINDOW_WIDTH // 2, 125], 1)
         pygame.draw.line(surface, WHITE, [WINDOW_WIDTH // 2, 150], [WINDOW_WIDTH // 2, 200], 1)
-        pygame.draw.line(surface, WHITE, [WINDOW_WIDTH // 2, 250], [WINDOW_WIDTH // 2, 300], 1)
-        pygame.draw.line(surface, WHITE, [WINDOW_WIDTH // 2, 350], [WINDOW_WIDTH // 2, 400], 1)
-        pygame.draw.line(surface, WHITE, [WINDOW_WIDTH // 2, 450], [WINDOW_WIDTH // 2, 500], 1)
-        pygame.draw.rect(surface, WHITE, paddle_one)
-        pygame.draw.rect(surface, WHITE, paddle_two)
-        pygame.draw.rect(surface, WHITE, paddle_three)
-        pygame.draw.rect(surface, WHITE, paddle_four)
-        pygame.draw.rect(surface, WHITE, paddle_five)
-        pygame.draw.rect(surface, WHITE, paddle_six)
-        pygame.draw.circle(surface, WHITE, pos_ball, 10)
+        pygame.draw.line(surface, WHITE, [WINDOW_WIDTH // 2, 225], [WINDOW_WIDTH // 2, 275], 1)
+        pygame.draw.line(surface, WHITE, [WINDOW_WIDTH // 2, 300], [WINDOW_WIDTH // 2, 350], 1)
+        pygame.draw.circle(surface, WHITE, pos_ball, 7)
 
-        _player_score = font_arial.render("Player current score: " + str(PLAYER_SCORE), 1, WHITE)
-        _player_game = font_arial.render("Total games won: " + str(PLAYER_GAMES_WON), 1, WHITE)
-        _AI_score = font_arial.render("AI current score: " + str(AI_SCORE), 1, WHITE)
-        _AI_game = font_arial.render("Total games won: " + str(AI_GAMES_WON), 1, WHITE)
+        _player_score = font_arial.render("Player current score: " + str(PLAYER_SCORE), 1, GREEN)
+        _player_game = font_arial.render("Total games won: " + str(PLAYER_GAMES_WON), 1, GREEN)
+        _AI_score = font_arial.render("AI current score: " + str(AI_SCORE), 1, GREEN)
+        _AI_game = font_arial.render("Total games won: " + str(AI_GAMES_WON), 1, GREEN)
 
-        surface.blit(_player_score, (50, 20))
-        surface.blit(_player_game, (50, 40))
-        surface.blit(_AI_score, (600, 20))
-        surface.blit(_AI_game, (600, 40))
+        surface.blit(_player_score, (125, 440))
+        surface.blit(_player_game, (125, 460))
+        surface.blit(_AI_score, (525, 440))
+        surface.blit(_AI_game, (525, 460))
 
         pos_paddle_four[1] = pos_ball[1]
         pos_paddle_five[0] = pos_ball[0]
@@ -177,7 +170,7 @@ while True:
         surface.blit(paddle_resize_two, paddle_five)
         surface.blit(paddle_resize_two, paddle_six)
 
-        if int(pos_paddle_four[1]) >= 0 and int(pos_paddle_four[1]) <= WINDOW_HEIGHT:
+        if 0 <= int(pos_paddle_four[1]) <= WINDOW_HEIGHT:
             paddle_four.centery = pos_ball[1]
 
         if int(pos_paddle_five[0]) >= WINDOW_WIDTH // 2 + 50:
